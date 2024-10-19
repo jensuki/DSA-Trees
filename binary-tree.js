@@ -103,7 +103,27 @@ class BinaryTree {
    * (i.e. are at the same level but have different parents. ) */
 
   areCousins(node1, node2) {
+    if (!this.root) return false;
 
+    function findLevelAndParent(node, target, level = 0, parent = null) {
+      if (!node) return null;
+
+      if (node === target) {
+        // if we found the target node, return its level and parent
+        return { level, parent };
+      }
+      const leftResult = findLevelAndParent(node.left, target, level + 1, node)
+      if (leftResult) return leftResult;
+      return findLevelAndParent(node.right, target, level + 1, node);
+    }
+    //find level and parent info for both nodes
+    const node1Info = findLevelAndParent(this.root, node1)
+    const node2Info = findLevelAndParent(this.root, node2)
+
+    const sameLevel = node1Info.level === node2Info.level;
+    const differentParents = node1Info.parent !== node2Info.parent;
+
+    return sameLevel && differentParents
   }
 
   /** Further study!
